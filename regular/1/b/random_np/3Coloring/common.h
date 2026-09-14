@@ -69,11 +69,13 @@ struct EDGE
     struct VERTICES from;
     struct VERTICES to;
 };
+
 struct EDGE_LIST
 {
     struct EDGE edgeList[MAX_EDGES];
     ssize_t length;
 };
+
 struct Shm_t
 {
     bool terminateGenerators;
