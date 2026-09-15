@@ -44,14 +44,14 @@ static struct EDGE_LIST parse(int argc, char **argv)
     {
         for (int j = 0; j < argc; ++j)
         {
-            if (strcmp(argv[i], argv[j]))
+            if ((i != j) && strcmp(argv[i], argv[j]) == 0)
             {
                 error("duplicate arguments");
             }
         }
     }
 
-    for (int i = 0; i < argc; ++i)
+    for (int i = 1; i < argc; ++i)
     {
         if (strchr(argv[i], '-') == NULL)
         {
@@ -63,7 +63,7 @@ static struct EDGE_LIST parse(int argc, char **argv)
         }
     }
 
-    for (int i = 0; i < argc; ++i)
+    for (int i = 1; i < argc; ++i)
     {
         char *s = strdup(argv[i]);
 
@@ -117,7 +117,6 @@ static struct EDGE_LIST solve(struct EDGE_LIST input)
     struct VERTICES verticesArray[MAX_EDGES * 2]; // 2048
     size_t index = 0;
 
-    /* Color the vertices */
     for (int i = 0; i < input.length; ++i)
     {
         struct VERTICES first = input.edgeList[i].from;
@@ -127,14 +126,25 @@ static struct EDGE_LIST solve(struct EDGE_LIST input)
         verticesArray[index++] = second;
     }
 
-    /* Color the EDGES*/
+    /* Color the vertices */
     for (int i = 0; i < index; i++)
     {
         verticesArray[i].color = rand() % 3;
     }
 
-    struct EDGE_LIST solution = {0};
+    /* Color the EDGES*/
+    for (int i = 0; i < input.length; i++)
+    {
+        for (int j = 0; j < index; j++)
+        {
+            if (input.edgeList[i].from.name == verticesArray[j].name)
+            {
+                input.edgeList[i].from.color = verticesArray[j].color;
+            }
+        }
+    }
 
+    struct EDGE_LIST solution = {0};
     size_t indexSolution;
 
     for (int i = 0; i < input.length; i++)
