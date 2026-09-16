@@ -9,6 +9,7 @@
 struct circBuff
 {
     struct shm *sharedMemory;
+    int shmfd;
     sem_t *free, *write, *used;
 };
 

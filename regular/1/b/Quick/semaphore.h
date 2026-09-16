@@ -26,6 +26,7 @@ struct shm
     size_t data[MAX_BUFF_SIZE];
     size_t readhead;
     size_t writehead;
+    bool alive;
 };
 
 /*SHARED MEMORY OPTIONS */
