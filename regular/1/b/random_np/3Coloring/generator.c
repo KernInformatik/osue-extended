@@ -7,6 +7,8 @@
  *
  * @copyright Copyright (c) 2026
  *
+ * @details attention this is just the first implementation and not the final version
+ *
  */
 
 /**
@@ -86,21 +88,20 @@ static struct EDGE_LIST parse(int argc, char **argv)
     /** write the given input in a EDGE_LIST and return it */
     struct EDGE_LIST rv = {0};
     rv.length = (ssize_t)(argc - 1);
-
-    for (int i = 0; i <= argc; ++i)
+    for (int i = 1; i < argc; ++i)
     {
         char *s = strdup(argv[i]);
-
         if (s == NULL)
-        {
             error("strdup");
-        }
+
         char *endptr;
         char *first_vertices = strtok_r(s, "-", &endptr);
         char *second_vertices = strtok_r(NULL, "-", &endptr);
 
-        rv.edgeList[i].from.name = strtoul(first_vertices, NULL, 10);
-        rv.edgeList[i].to.name = strtoul(second_vertices, NULL, 10);
+        rv.edgeList[i - 1].from.name = (size_t)strtoul(first_vertices, NULL, 10);
+        rv.edgeList[i - 1].to.name = (size_t)strtoul(second_vertices, NULL, 10);
+
+        free(s);
     }
 
     return rv;
@@ -127,44 +128,101 @@ static struct EDGE_LIST solve(struct EDGE_LIST input)
     }
 
     /* Color the vertices */
-    for (int i = 0; i < index; i++)
+    for (size_t i = 0; i < index; i++)
     {
         verticesArray[i].color = rand() % 3;
     }
 
     /* Color the EDGES*/
-    for (int i = 0; i < input.length; i++)
+    for (ssize_t i = 0; i < input.length; i++)
     {
-        for (int j = 0; j < index; j++)
+        for (size_t j = 0; j < index; j++)
         {
             if (input.edgeList[i].from.name == verticesArray[j].name)
             {
                 input.edgeList[i].from.color = verticesArray[j].color;
             }
+            if (input.edgeList[i].to.name == verticesArray[j].name)
+            {
+                input.edgeList[i].to.color = verticesArray[j].color;
+            }
         }
     }
 
     struct EDGE_LIST solution = {0};
-    size_t indexSolution;
+    ssize_t indexSolution = 0;
 
     for (int i = 0; i < input.length; i++)
     {
         struct EDGE e = input.edgeList[i];
 
-        solution.edgeList[indexSolution++] = e;
+        if (e.from.color == e.to.color)
+            solution.edgeList[indexSolution++] = e;
     }
     solution.length = indexSolution;
     indexSolution = 0;
     return solution;
 }
 
-static void writeSolution(struct EDGE_LIST solution, struct Shm_t *shmp)
+/**
+ * @brief Writes the solution in a circular buffer via semaphores and shared memory
+ * @details see common.h
+ * @param solution
+ * @param shmp
+ */
+static void writeSolution(struct EDGE_LIST solution, struct Shm *shmp)
 {
+    if (solution.length < MAX_EDGES)
+    {
+        shmp->circular_buffer[shmp->writeIndex] = solution;
+        shmp->writeIndex = (shmp->writeIndex + 1) % (buff_length);
+    }
+
+    if (sem_post(&shmp->writeMutex) == -1)
+        error("sem_post()");
 }
 
 int main(int argc, char **argv)
 {
     struct EDGE_LIST input = parse(argc, argv);
-    struct EDGE_LIST solution = solve(input);
+
+    int fd = shm_open(SHM_PATH, O_RDWR, 0);
+
+    assert(fd != -1);
+
+    struct Shm *shmp = mmap(NULL, sizeof(*shmp), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+    if (shmp == MAP_FAILED)
+    {
+        error("mmap");
+        exit(EXIT_FAILURE);
+    }
+
+    while (!shmp->killprocess)
+    {
+        if ((sem_wait(&shmp->numFree) == -1) && (errno != EINTR))
+        {
+            error("sem_wait");
+        }
+
+        struct EDGE_LIST solution = solve(input);
+        writeSolution(solution, shmp);
+
+        if (sem_post(&shmp->numUsed) == -1)
+        {
+            error("sem_post");
+        }
+    }
+
+    if (munmap(shmp, sizeof(*shmp)) == -1)
+    {
+        error("munmap");
+    }
+
+    if (close(fd) == -1)
+    {
+        error("close");
+    }
+
     exit(EXIT_SUCCESS);
 }

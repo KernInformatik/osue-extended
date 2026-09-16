@@ -76,12 +76,12 @@ struct EDGE_LIST
     ssize_t length;
 };
 
-struct Shm_t
+struct Shm
 {
-    bool terminateGenerators;
+    bool killprocess;
     size_t numGenerators;
 
-    struct EDGE_LIST buf[buff_length];
+    struct EDGE_LIST circular_buffer[buff_length];
     size_t readIndex;
     size_t writeIndex;
 
