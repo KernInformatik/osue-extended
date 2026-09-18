@@ -24,8 +24,8 @@ process
 struct shm
 {
     size_t data[MAX_BUFF_SIZE];
-    size_t readhead = 0;
-    size_t writehead = 0;
+    size_t readhead;
+    size_t writehead;
     int *shmfd;
     sem_t *free, *write, *used;
     bool alive;
