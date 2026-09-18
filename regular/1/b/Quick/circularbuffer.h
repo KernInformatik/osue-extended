@@ -17,7 +17,7 @@
  * @param isServer initializes the circular buffer corresponding to a server or a client
  * @return struct circBuff*
  */
-void initializeCircularBuffer(struct shm *shm,bool isServer);
+void initializeCircularBuffer(struct shm *shm);
 
 /**
  * @brief closes the circular buffer

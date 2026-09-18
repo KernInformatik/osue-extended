@@ -17,9 +17,10 @@
 
 static struct shm *circularBuffer;
 
-void initializeCircularBuffer(struct shm *shm, bool isServer)
+void initializeCircularBuffer(struct shm *shm)
 {
     circularBuffer = shm;
+    circularBuffer->writehead = 0, circularBuffer->readhead = 0;
 }
 
 int closeCircularBuffer(bool isServer)
