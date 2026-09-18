@@ -27,7 +27,7 @@
 #include <time.h>
 
 #define buff_length (32)
-#define SHM_PATH "/12519647shm"
+#define SHM_PATH "/XXXXXXXXshm"
 #define MAX_EDGES 1028
 #define MAX_SOLUTION 128
 

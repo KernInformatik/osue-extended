@@ -6,12 +6,6 @@
  * @details only the sharedMemory is shared. The semaphores need to be initialized, see "sempahore.h" library. The shm
  * data is capped to 2048 bytes (2KiB) but can be increased up to 4KiB
  */
-struct circBuff
-{
-    struct shm *sharedMemory;
-    int shmfd;
-    sem_t *free, *write, *used;
-};
 
 /**
  * @brief This functions creates the circular buffer

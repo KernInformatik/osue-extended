@@ -26,11 +26,13 @@ struct shm
     size_t data[MAX_BUFF_SIZE];
     size_t readhead;
     size_t writehead;
+    int *shmfd;
+    sem_t *free, *write, *used;
     bool alive;
 };
 
 /*SHARED MEMORY OPTIONS */
-#define SHM_NAME "/e12519647_shm"
+#define SHM_NAME "/eXXXXXXXX_shm"
 #define SHM_OFLAG_SERVER O_RDWR | O_CREAT | O_EXCL
 #define SHM_OFLAG_CLIENT O_RDWR
 #define SHM_MODE S_IRWXU
@@ -45,13 +47,13 @@ struct shm
 needed for proper IPC communication between processess
  *
  */
-#define FREE_SPACE_SEMAPHORE "/e12519647_sem_free"
+#define FREE_SPACE_SEMAPHORE "/eXXXXXXXX_sem_free"
 #define FREE_SPACE_SEMAPHORE_SIZE MAX_BUFF_SIZE
 
-#define USED_SPACE_SEMAPHORE "/e12519647_sem_used"
+#define USED_SPACE_SEMAPHORE "/eXXXXXXXX_sem_used"
 #define USED_SPACE_SEMAPHORE_SIZE 0
 
-#define WRITE_SPACE_SEMAPHORE "/e12519647_sem_write" // mutex
+#define WRITE_SPACE_SEMAPHORE "/eXXXXXXXX_sem_write" // mutex
 #define WRITE_SPACE_SEMAPHORE_SIZE 1
 
 #define OPEN_SEM_MODE S_IRWXU
