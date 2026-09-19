@@ -2,7 +2,7 @@ var indexSectionsWithContent =
 {
   0: "cfgis",
   1: "gs",
-  2: "s",
+  2: "gs",
   3: "cis",
   4: "f"
 };
