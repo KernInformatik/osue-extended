@@ -12,15 +12,18 @@
 #include "../lib/libsem/circularbuff.h"
 #include "../lib/libsem/semaphore.h"
 
-struct GRAPH_EDGE_LIST *parseInput(int argc, char **argv)
+struct GRAPH_EDGE_LIST *
+parseInput(int argc, char **argv)
 {
 }
 
-void colorizeVertex(struct GRAPH_EDGE_LIST *edge_list)
+void
+colorizeVertex(struct GRAPH_EDGE_LIST *edge_list)
 {
 }
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
-    exit(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }

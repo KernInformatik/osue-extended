@@ -47,5 +47,4 @@ void writeCircularBuffer(struct GRAPH_EDGE edge);
  */
 struct GRAPH_EDGE readCircularBuffer();
 
-
 #endif
