@@ -19,10 +19,12 @@ process
 #ifndef SEMAPHORE_H
 #define SEMAPHORE_H
 
-#include "common.h"
+#include "../common.h"
+#include "../graph/graph.h"
+
 #define MAX_BUFF_SIZE 2048
 struct shm {
-	size_t data[MAX_BUFF_SIZE];
+	struct GRAPH_EDGE data[MAX_BUFF_SIZE];
 	size_t readhead;
 	size_t writehead;
 	int *shmfd;

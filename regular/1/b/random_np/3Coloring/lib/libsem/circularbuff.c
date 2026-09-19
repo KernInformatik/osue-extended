@@ -1,7 +1,5 @@
 #include "circularbuff.h"
 #include "semaphore.h"
-#include <semaphore.h>
-#include <stdlib.h>
 
 static struct shm *circularbuff;
 
@@ -20,24 +18,25 @@ int closeCircularBuffer(bool isServer)
 }
 
 /*Read the circubuff.h for documentation */
-void writeCircularBuffer(int value)
+void writeCircularBuffer(struct GRAPH_EDGE edge)
 {
     sem_wait(circularbuff->free);
     sem_wait(circularbuff->write);
-    circularbuff->data[circularbuff->writehead] = value;
-    sem_post(circularbuff->used);
-    sem_post(circularbuff->write);
+    /*@deprecated  circularbuff->data[circularbuff->writehead] = value;*/
+    circularbuff->data[circularbuff->writehead] = edge;
     circularbuff->writehead += 1;
     circularbuff->writehead %= MAX_BUFF_SIZE;
+    sem_post(circularbuff->used);
+    sem_post(circularbuff->write);
 }
 
 /*Read the circubuff.h for documentation */
-int readCircularBuffer()
+struct GRAPH_EDGE readCircularBuffer()
 {
-    int rv;
+    struct GRAPH_EDGE rv;
     sem_wait(circularbuff->used);
-    rv = circularbuff->data[circularbuff->readhead];
-    sem_post(circularbuff->free);
+    /*@deprecated rv = circularbuff->data[circularbuff->readhead]; */
     circularbuff->readhead = (circularbuff->readhead + 1) % MAX_BUFF_SIZE;
+    sem_post(circularbuff->free);
     return rv;
 }

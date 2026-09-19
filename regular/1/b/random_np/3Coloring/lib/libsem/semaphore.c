@@ -1,7 +1,4 @@
 #include "semaphore.h"
-#include "common.h"
-#include <semaphore.h>
-
 /*Begin helper functions */
 static inline struct shm *sharedMemory(int *shmfd, bool isServer)
 {
@@ -16,7 +13,7 @@ static inline struct shm *sharedMemory(int *shmfd, bool isServer)
         error_exit_failure(ftruncate(*shmfd, sizeof(struct shm)), TRUNCATING_SHM_ERROR);
     }
 
-    rv = (struct shm *)mmap(NULL, sizeof(struct shm *), MMP_PROT_FLAGS, MMP_FLAGS, *shmfd, MMP_OFFSET);
+    rv = (struct shm *)mmap(NULL, sizeof(struct shm), MMP_PROT_FLAGS, MMP_FLAGS, *shmfd, MMP_OFFSET);
 
     if (rv == MAP_FAILED)
         error_exit(MAPPING_SHM_ERROR);

@@ -1,7 +1,7 @@
 #ifndef CIRCULARBUFF_H
 #define  CIRCULARBUFF_H
 
-#include "common.h"
+#include "../common.h"
 #include "semaphore.h"
 
 /**
@@ -37,7 +37,7 @@ int closeCircularBuffer(bool isServer);
  * @param circBuff
  * @param value
  */
-void writeCircularBuffer(int value);
+void writeCircularBuffer(struct GRAPH_EDGE edge);
 
 /**
  * @brief reads from the circular buffer
@@ -45,7 +45,7 @@ void writeCircularBuffer(int value);
  * @param circBuff
  * @return int
  */
-int readCircularBuffer();
+struct GRAPH_EDGE readCircularBuffer();
 
 
 #endif
