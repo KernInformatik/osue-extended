@@ -21,15 +21,14 @@ process
 
 #include "../common.h"
 #include "../graph/graph.h"
+#include <signal.h>
 
 #define MAX_BUFF_SIZE 2048
 struct shm {
 	struct GRAPH_EDGE data[MAX_BUFF_SIZE];
 	size_t readhead;
 	size_t writehead;
-	int *shmfd;
-	sem_t *free, *write, *used;
-	bool alive;
+	volatile sig_atomic_t alive;
 };
 
 /*SHARED MEMORY OPTIONS */
