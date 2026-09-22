@@ -6,7 +6,7 @@ LIBNAME  = libsem.a
 LIBSEM   = $(BUILDDIR)/$(LIBNAME)
 
 # sources
-LIB_SRCS = $(wildcard lib/libsem/*.c)
+LIB_SRCS = $(wildcard lib/*.c)
 LIB_OBJS = $(LIB_SRCS:%.c=$(BUILDDIR)/%.o)
 
 GEN_SRCS = src/generator.c
@@ -21,8 +21,8 @@ DEPS     = $(ALL_OBJS:.o=.d)
 GENERATOR  = $(BINDIR)/generator
 SUPERVISOR = $(BINDIR)/supervisor
 
-# include paths (common.h, graph/graph.h, libsem/*.h)
-INCLUDES = -Ilib -Ilib/graph -Ilib/libsem
+# include paths (common.h, graph.h, semaphore.h all live directly in lib/)
+INCLUDES = -Ilib
 
 defs    = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -D_POSIX_C_SOURCE=200809L
 default = -std=c99 -pedantic -g -Wall $(defs)
