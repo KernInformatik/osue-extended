@@ -48,7 +48,6 @@ static inline struct shm *sharedMemory(int *shmfd, bool isServer)
     if (isServer)
     {
         memset(rv, 0, sizeof(*rv));
-        rv->alive = 1;
     }
     return rv;
 }

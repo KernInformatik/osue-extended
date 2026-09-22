@@ -32,14 +32,14 @@ int main(int argc, char **argv)
     int shmfd;
     struct shm *buffer = sharedMemory_Server(&shmfd);
     sem_t *free, *used, *write;
-
+    signal(SIGINT, sigint_handler);
     free = initializeSemaphore_Server(FREE_SPACE_SEMAPHORE, FREE_SPACE_SEMAPHORE_SIZE);
 
     write = initializeSemaphore_Server(WRITE_SPACE_SEMAPHORE, WRITE_SPACE_SEMAPHORE_SIZE);
 
     used = initializeSemaphore_Server(USED_SPACE_SEMAPHORE, USED_SPACE_SEMAPHORE_SIZE);
 
-    while (buffer->alive)
+    while (!quit)
     {
         if (sem_wait(used) == -1)
         {

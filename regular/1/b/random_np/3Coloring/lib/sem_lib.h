@@ -35,7 +35,6 @@ struct shm {
 	struct GRAPH_EDGE_LIST data[MAX_BUFF_SIZE];
 	size_t readhead;
 	size_t writehead;
-	volatile sig_atomic_t alive;
 };
 
 /*SHARED MEMORY OPTIONS */
