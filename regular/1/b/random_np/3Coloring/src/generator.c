@@ -11,7 +11,6 @@ struct GRAPH_EDGE_LIST parseInput(int argc, char **argv)
     /* i = 1 because argc also counts the white space which is mentally deranged, took me a while to realize it*/
     for (int i = 1; i < argc; i++)
     {
-
         char *savePtr;
         char *first = strtok_r(argv[i], "-", &savePtr);
         char *second = strtok_r(NULL, "-", &savePtr);
@@ -75,4 +74,9 @@ int main(int argc, char **argv)
 
     struct GRAPH_EDGE_LIST test = parseInput(argc, argv);
     writeSolution(generateSolution(test), possibleSolution, free, used, write);
+
+    cleanSemaphore_Client(free);
+    cleanSemaphore_Client(used);
+    cleanSemaphore_Client(write);
+    cleanSharedMemory_Client(possibleSolution, shmfd);
 }

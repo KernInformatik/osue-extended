@@ -56,4 +56,9 @@ int main(int argc, char **argv)
             error_exit("sem_post");
         }
     }
+
+    cleanSemaphore_Server(free, FREE_SPACE_SEMAPHORE);
+    cleanSemaphore_Server(used, USED_SPACE_SEMAPHORE);
+    cleanSemaphore_Server(write, WRITE_SPACE_SEMAPHORE);
+    cleanSharedMemory_Server(buffer, shmfd);
 }
