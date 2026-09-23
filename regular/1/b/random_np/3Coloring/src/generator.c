@@ -1,21 +1,22 @@
-#include "../lib/common.h"
 #include "../lib/graph.h"
 #include "../lib/sem_lib.h"
-#include <semaphore.h>
+#include <stdlib.h>
 
 struct GRAPH_EDGE_LIST parseInput(int argc, char **argv)
 {
 
     struct GRAPH_EDGE_LIST rv;
-
-    /* i = 1 because argc also counts the white space which is mentally deranged, took me a while to realize it*/
+    /* i = 1 because argc also counts the white space which is mentally deranged, took me a while to realize it and argv[0] is the program name damn it*/
     for (int i = 1; i < argc; i++)
     {
         char *savePtr;
-        char *first = strtok_r(argv[i], "-", &savePtr);
+        char *first  = strdup(argv[i]);
+        strtok_r(first, "-", &savePtr);
         char *second = strtok_r(NULL, "-", &savePtr);
         rv.edgeList[i - 1].from.name = strtol(first, NULL, 10);
         rv.edgeList[i - 1].to.name = strtol(second, NULL, 10);
+
+        free(first);
     }
     rv.length = (size_t)argc - 1;
 

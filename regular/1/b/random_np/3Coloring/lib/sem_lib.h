@@ -173,6 +173,7 @@ void cleanSemaphore_Server(sem_t *semaphore, const char *sem_name);
  * @param semaphore Pointer to the semaphore, as returned by semaphore_Client.
  */
 void cleanSemaphore_Client(sem_t *semaphore);
+
 void onSignal(int sig, siginfo_t *si, void *unused);
 void initSignalHandler(void);
 #endif

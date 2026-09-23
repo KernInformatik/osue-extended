@@ -1,12 +1,7 @@
 #include "../lib/common.h"
 #include "../lib/sem_lib.h"
 #define SOLUTION_CONGRATULATIONS "Congrats buddy, the given graph is colorable"
-static volatile sig_atomic_t quit = 0;
-
-void sigint_handler(int signum)
-{
-    quit = 1;
-}
+extern volatile sig_atomic_t quit;
 
 void readSolution(struct shm *buffer)
 {
@@ -18,12 +13,17 @@ void readSolution(struct shm *buffer)
         printf("%s", SOLUTION_CONGRATULATIONS);
     }
 
-    long currentBestSolution = ULONG_MAX;
+    static long currentBestSolution = ULONG_MAX;
 
     if (solution.length < currentBestSolution)
     {
         currentBestSolution = solution.length;
-        printf("[./supervisor] Solution with %ld edges:", solution.length);
+        printf("[./supervisor] Solution with %zu edges:", solution.length);
+        for (size_t i = 0; i < solution.length; i++)
+        {
+            printf(" %d-%d", solution.edgeList[i].from.name, solution.edgeList[i].to.name);
+        }
+        printf("\n");
     }
 }
 
@@ -32,7 +32,12 @@ int main(int argc, char **argv)
     int shmfd;
     struct shm *buffer = sharedMemory_Server(&shmfd);
     sem_t *free, *used, *write;
-    signal(SIGINT, sigint_handler);
+
+
+    initSignalHandler();
+
+
+
     free = initializeSemaphore_Server(FREE_SPACE_SEMAPHORE, FREE_SPACE_SEMAPHORE_SIZE);
 
     write = initializeSemaphore_Server(WRITE_SPACE_SEMAPHORE, WRITE_SPACE_SEMAPHORE_SIZE);
@@ -43,6 +48,7 @@ int main(int argc, char **argv)
     {
         if (sem_wait(used) == -1)
         {
+            if(quit)break;
             if (errno == EINTR)
             {
                 continue;

@@ -1,6 +1,4 @@
 #include "sem_lib.h"
-#include <unistd.h>
-
 volatile sig_atomic_t quit = false;
 void onSignal(int sig, siginfo_t *si, void *unused)
 {
