@@ -1,3 +1,13 @@
+/**
+ * @file sem_lib.c
+ * @author kernkraftwerk (kernkraftdev@hotmail.com)
+ * @brief for documentation see the sem_lib.c
+ * @version 0.1
+ * @date 2026-09-29
+ *
+ * @copyright Copyright (c) 2026
+ *
+ */
 #include "sem_lib.h"
 volatile sig_atomic_t quit = false;
 void onSignal(int sig, siginfo_t *si, void *unused)

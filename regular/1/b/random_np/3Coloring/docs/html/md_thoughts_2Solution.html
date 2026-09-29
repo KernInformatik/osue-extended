@@ -95,14 +95,14 @@ $(function(){initNavTree('md_thoughts_2Solution.html','',''); });
 <p>I had severe issues on how to process if the given solution is actually a solution.</p>
 <p>The core idea is this:</p>
 <ul>
-<li>generator.c parses the input and writes it into our buffer</li>
+<li><a class="el" href="generator_8c.html" title="This is the generator, parsing the input, coloring the vertexes and storing it accordingly into the s...">generator.c</a> parses the input and writes it into our buffer</li>
 <li>it colorizes the vertices of our graph</li>
 <li>it parses through the graph with a solutionCounter incremented with illegal solutions: solution.vertex.u.color == solution.vertex.v.color<ul>
 <li>if the length of the solution is 0 the graph is colorable</li>
 </ul>
 </li>
 </ul>
-<p>But what was hard to implement? To be honest, the structure on how to save the data. It really isn't hard to implement the graph basic structure, like vertexes or the edges. Even the thought to implent the <a class="el" href="structGRAPH__EDGE__LIST.html">GRAPH_EDGE_LIST</a> makes also sense.</p>
+<p>But what was hard to implement? To be honest, the structure on how to save the data. It really isn't hard to implement the graph basic structure, like vertexes or the edges. Even the thought to implent the <a class="el" href="structGRAPH__EDGE__LIST.html" title="An elegant way to store a graph, each graph consists of a Graph list, which is storing a maximum of 1...">GRAPH_EDGE_LIST</a> makes also sense.</p>
 <p>However, the difficult part was the shared memory, and what it should save.</p>
 <p>After reading other's solutions (see github repo) I came to the conclusion that the shared memory should save edgelists with max buff size of 32 or even 64 I think it doen't have that big impact.</p>
 <p>After copy pasting and changing the shm data of libsem, 100% handwritten, see on github, I think I got the general structure of it.</p>
