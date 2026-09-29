@@ -1,8 +1,23 @@
+/**
+ * @file supervisor.c
+ * @author kernkraftwerk (kernkraftdev@hotmail.com)
+ * @brief This is the supervisor, reading from the circular buffer located in /dev/shm
+ * @version 0.1
+ * @date 2026-09-29
+ *
+ * @copyright Copyright (c) 2026
+ *
+ */
 #include "../lib/common.h"
 #include "../lib/sem_lib.h"
 #define SOLUTION_CONGRATULATIONS "Congrats buddy, the given graph is colorable"
 extern volatile sig_atomic_t quit;
 
+/**
+ * @brief reads the solution from the circular buffer, prints a congratulations message
+ *
+ * @param buffer the circular buffer storing the edges of a graph, see graph.h and sem_lib.h
+ */
 void readSolution(struct shm *buffer)
 {
     struct GRAPH_EDGE_LIST solution = buffer->data[buffer->readhead];
@@ -27,16 +42,20 @@ void readSolution(struct shm *buffer)
     }
 }
 
+/**
+ * @brief
+ *
+ * @param argc argument counter
+ * @param argv  argument vectors
+ * @return int retuns 0 on success and -1 on failure
+ */
 int main(int argc, char **argv)
 {
     int shmfd;
     struct shm *buffer = sharedMemory_Server(&shmfd);
     sem_t *free, *used, *write;
 
-
     initSignalHandler();
-
-
 
     free = initializeSemaphore_Server(FREE_SPACE_SEMAPHORE, FREE_SPACE_SEMAPHORE_SIZE);
 
@@ -48,7 +67,8 @@ int main(int argc, char **argv)
     {
         if (sem_wait(used) == -1)
         {
-            if(quit)break;
+            if (quit)
+                break;
             if (errno == EINTR)
             {
                 continue;

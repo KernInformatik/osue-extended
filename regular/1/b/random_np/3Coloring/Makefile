@@ -1,3 +1,5 @@
+# for hardening toolchain see: https://wiki.gentoo.org/wiki/Hardened/Toolchain
+
 CC       = gcc
 BUILDDIR = build
 BINDIR   = .
@@ -32,7 +34,7 @@ verbose = -std=c99 -pedantic -g3 -Wall -Wextra -Wwrite-strings -Wconversion -Wfo
 harden_cc = -fstack-protector-strong -fstack-clash-protection -D_FORTIFY_SOURCE=2 \
             -fPIE -Wformat -Wformat-security -Werror=format-security
 
-# link-time hardening (applied when linking the executables)
+# link-time hardening
 harden_ld = -pie -Wl,-z,relro,-z,now -Wl,-z,noexecstack
 
 asan = -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fno-common
