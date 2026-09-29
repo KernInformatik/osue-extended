@@ -1,7 +1,11 @@
 #include "circularbuffer.h"
 #include "semaphore.h"
 
-int *shmfd;
+/**
+ * @todo Implement the circularbuffer with semaphore.h API
+ *
+ */
+
 struct circBuff *initializeCircularBuffer(bool isServer)
 {
     struct circBuff *rv = (struct circBuff *)malloc(sizeof(struct circBuff));

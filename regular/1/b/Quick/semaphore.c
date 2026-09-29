@@ -1,4 +1,6 @@
 #include "semaphore.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 /*STATIC HELPER FUNCTIONS*/
 
@@ -21,6 +23,7 @@ static struct shm *openSharedMemory(int *shmfd, bool isServer)
 
     *shmfd = shm_open(SHM_NAME, oflag, SHM_MODE);
     error_exit_failure(*shmfd, openErr);
+    error_exit_failure(ftruncate(*shmfd, sizeof(struct shm)), "ftruncate");
 
     if (isServer)
         error_exit_failure(ftruncate(*shmfd, sizeof(struct shm)), TRUNCATING_SHM_ERROR);
